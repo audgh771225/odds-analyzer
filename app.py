@@ -1,3 +1,19 @@
+import streamlit as st import matplotlib.pyplot as plt import matplotlib.patches as patches
+
+st.set_page_config(layout="wide") st.title("동일배당 분석기 (일반 + 핸디캡)")
+
+team_home = st.text_input("홈팀명", "하이덴하임") team_away = st.text_input("원정팀명", "보훔") score = st.text_input("스코어", "0 : 0")
+
+st.subheader("일반 배당 및 구매율") gen_odds = [st.number_input(f"일반 {r} 배당", value=v) for r, v in zip(['패', '무', '승'], [2.60, 3.35, 2.21])] gen_buy = [st.number_input(f"일반 {r} 구매율 (%)", value=v) for r, v in zip(['패', '무', '승'], [16.0, 47.6, 36.4])]
+
+st.subheader("핸디 배당 및 구매율") hdc_odds = [st.number_input(f"핸디 {r} 배당", value=v) for r, v in zip(['패', '무', '승'], [1.51, 4.05, 4.40])] hdc_buy = [st.number_input(f"핸디 {r} 구매율 (%)", value=v) for r, v in zip(['패', '무', '승'], [16.6, 60.7, 22.7])]
+
+분석 결과 출력
+
+def analyze(buy, kind): result = "" if buy[1] >= 45: result = f"{kind} 배당 분석 결과: 무승부 확률 매우 높음! (무 구매율 {buy[1]:.1f}%)" elif buy[2] >= 40: result = f"{kind} 배당 분석 결과: 홈 승리 집중! (승 구매율 {buy[2]:.1f}%)" elif buy[0] <= 20: result = f"{kind} 배당 분석 결과: 역배당(패) 확률 낮음 (패 구매율 {buy[0]:.1f}%)" else: result = f"{kind} 배당 분석 결과: 특별한 쏠림 없음" return result
+
+st.subheader("분석 결과") st.success(analyze(gen_buy, "일반")) st.success(analyze(hdc_buy, "핸디캡"))
+
 
 import streamlit as st
 import matplotlib.pyplot as plt
